@@ -61,6 +61,7 @@ export interface ScheduleItem {
 }
 
 export interface LessonActivity {
+  id?: string;
   name: string; // 1. Khởi động, 2. Khám phá, 3. Luyện tập, 4. Vận dụng
   objective?: string; // Không cần mục tiêu riêng cho từng hoạt động (đã quy về Mục I Yêu cầu cần đạt)
   teacherActivity: string; // Hoạt động của giáo viên (cột 1)

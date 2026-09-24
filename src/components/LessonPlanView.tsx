@@ -553,26 +553,31 @@ export const LessonPlanView: React.FC<LessonPlanViewProps> = ({
                           </div>
                         </div>
 
-                        {/* III. Các hoạt động dạy học chủ yếu */}
+                        {/* III. Các hoạt động dạy học chủ yếu / PROCEDURES (Bảng 2 cột chuẩn CV 2345) */}
                         <div className="border border-black overflow-x-auto bg-white">
                           <table className="w-full text-xs border-collapse">
                             <thead>
-                              <tr className="bg-stone-100 border-b border-black text-black font-bold">
-                                <th className="py-2 px-3 text-left w-32 border-r border-black">{isPlanEn ? "Activity" : "Hoạt Động"}</th>
-                                <th className="py-2 px-3 text-left border-r border-black w-1/2">{isPlanEn ? "Teacher's Activities" : "Hoạt Động Của Giáo Viên"}</th>
-                                <th className="py-2 px-3 text-left">{isPlanEn ? "Students' Activities" : "Hoạt Động Của Học Sinh"}</th>
+                              <tr className="bg-stone-100 border-b border-black text-black font-bold uppercase text-[11px] tracking-wide">
+                                <th className="py-2.5 px-3 text-center border-r border-black w-1/2">
+                                  {isPlanEn ? "TEACHER'S ACTIVITIES" : "HOẠT ĐỘNG CỦA GIÁO VIÊN"}
+                                </th>
+                                <th className="py-2.5 px-3 text-center w-1/2">
+                                  {isPlanEn ? "PUPILS' ACTIVITIES" : "HOẠT ĐỘNG CỦA HỌC SINH"}
+                                </th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-stone-200">
                               {plan.activities?.map((act, ai) => (
                                 <tr key={ai} className="hover:bg-stone-50">
-                                  <td className="py-2 px-3 align-top font-bold text-stone-900 border-r border-black text-[11px]">
-                                    {ai + 1}. {act.name}
+                                  <td className="py-2.5 px-3 align-top border-r border-black text-[11px] leading-relaxed w-1/2">
+                                    <div className="font-bold text-stone-950 uppercase text-[11px] mb-1.5 pb-1 border-b border-stone-200">
+                                      {act.name.match(/^\d+/) ? act.name : `${ai + 1}. ${act.name}`}
+                                    </div>
+                                    <div className="text-stone-800 whitespace-pre-line">
+                                      {act.teacherActivity}
+                                    </div>
                                   </td>
-                                  <td className="py-2 px-3 align-top text-stone-800 border-r border-black text-[11px] leading-relaxed whitespace-pre-line">
-                                    {act.teacherActivity}
-                                  </td>
-                                  <td className="py-2 px-3 align-top text-stone-800 text-[11px] leading-relaxed whitespace-pre-line">
+                                  <td className="py-2.5 px-3 align-top text-stone-800 text-[11px] leading-relaxed whitespace-pre-line w-1/2">
                                     {act.studentActivity}
                                   </td>
                                 </tr>
@@ -989,61 +994,65 @@ export const LessonPlanView: React.FC<LessonPlanViewProps> = ({
               )}
 
               {/* SECTION III: 2-COLUMN TEACHING ACTIVITIES TABLE */}
-              <div className="space-y-3 text-xs">
-                <h3 className="font-serif font-bold text-sm text-black border-b border-black pb-1 uppercase tracking-wide">
-                  {isEn ? "III. MAIN TEACHING ACTIVITIES" : "III. CÁC HOẠT ĐỘNG DẠY HỌC CHỦ YẾU (Bảng 2 cột Hoạt động GV - Hoạt động HS)"}
-                </h3>
+              {(() => {
+                const isSinglePlanEn = isEn || activePlan.subject.toLowerCase().includes("tiếng anh") || activePlan.subject.toLowerCase().includes("english") || (activePlan.teacherName && activePlan.teacherName.toLowerCase().includes("quyên")) || (schoolInfo.specialistSubject?.toLowerCase().includes("tiếng anh"));
+                return (
+                  <>
+                    <div className="space-y-3 text-xs">
+                      <h3 className="font-serif font-bold text-sm text-black border-b border-black pb-1 uppercase tracking-wide">
+                        {isSinglePlanEn ? "III. PROCEDURES" : "III. CÁC HOẠT ĐỘNG DẠY HỌC CHỦ YẾU (Bảng 2 cột Hoạt động GV - Hoạt động HS)"}
+                      </h3>
 
-                <div className="overflow-x-auto border border-black">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-stone-100 text-black font-serif font-bold uppercase text-[10px] tracking-wider border-b border-black">
-                        <th className="py-3 px-4 border-r border-black w-1/2 text-center">
-                          {isEn ? "TEACHER'S ACTIVITIES" : "HOẠT ĐỘNG CỦA GIÁO VIÊN"}
-                        </th>
-                        <th className="py-3 px-4 w-1/2 text-center">
-                          {isEn ? "STUDENTS' ACTIVITIES" : "HOẠT ĐỘNG CỦA HỌC SINH"}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-black">
-                      {activePlan.activities.map((act, actIdx) => (
-                        <tr key={act.id || actIdx} className={actIdx % 2 === 0 ? "bg-white" : "bg-stone-50/60"}>
-                          {/* Teacher Column */}
-                          <td className="py-3 px-4 border-r border-black align-top space-y-2">
-                            <div className="font-bold text-black text-xs uppercase">
-                              {act.name}
-                            </div>
-                            <div className="text-stone-900 leading-relaxed whitespace-pre-line text-xs">
-                              <strong>{isEn ? "* Procedure: " : "* Cách tiến hành: "}</strong>
-                              <br />
-                              {act.teacherActivity}
-                            </div>
-                          </td>
+                      <div className="overflow-x-auto border border-black">
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr className="bg-stone-100 text-black font-serif font-bold uppercase text-[10px] tracking-wider border-b border-black">
+                              <th className="py-3 px-4 border-r border-black w-1/2 text-center">
+                                {isSinglePlanEn ? "TEACHER'S ACTIVITIES" : "HOẠT ĐỘNG CỦA GIÁO VIÊN"}
+                              </th>
+                              <th className="py-3 px-4 w-1/2 text-center">
+                                {isSinglePlanEn ? "PUPILS' ACTIVITIES" : "HOẠT ĐỘNG CỦA HỌC SINH"}
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-black">
+                            {activePlan.activities.map((act, actIdx) => (
+                              <tr key={act.id || actIdx} className={actIdx % 2 === 0 ? "bg-white" : "bg-stone-50/60"}>
+                                {/* Teacher Column */}
+                                <td className="py-3 px-4 border-r border-black align-top space-y-2 w-1/2">
+                                  <div className="font-bold text-black text-xs uppercase border-b border-stone-200 pb-1">
+                                    {act.name}
+                                  </div>
+                                  <div className="text-stone-900 leading-relaxed whitespace-pre-line text-xs">
+                                    <strong>{isSinglePlanEn ? "* Procedure: " : "* Cách tiến hành: "}</strong>
+                                    <br />
+                                    {act.teacherActivity}
+                                  </div>
+                                </td>
 
-                          {/* Student Column */}
-                          <td className="py-3 px-4 align-top text-stone-900 leading-relaxed whitespace-pre-line text-xs">
-                            <div className="font-bold text-stone-500 text-[11px] mb-2 uppercase">
-                              {isEn ? "(Students' Response & Execution)" : "(Phản hồi & Thực hiện của HS)"}
-                            </div>
-                            {act.studentActivity}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                                {/* Student Column */}
+                                <td className="py-3 px-4 align-top text-stone-900 leading-relaxed whitespace-pre-line text-xs w-1/2">
+                                  {act.studentActivity}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
 
-              {/* SECTION IV: ĐIỀU CHỈNH SAU BÀI DẠY */}
-              <div className="space-y-2 text-xs">
-                <h3 className="font-serif font-bold text-sm text-black border-b border-black pb-1 uppercase tracking-wide">
-                  {isEn ? "IV. POST-LESSON ADJUSTMENTS" : "IV. ĐIỀU CHỈNH SAU BÀI DẠY"}
-                </h3>
-                <p className="text-stone-500 italic pl-2">
-                  {activePlan.postLessonAdjustment || "...................................................................................................................................................................................................."}
-                </p>
-              </div>
+                    {/* SECTION IV: ĐIỀU CHỈNH SAU BÀI DẠY */}
+                    <div className="space-y-2 text-xs">
+                      <h3 className="font-serif font-bold text-sm text-black border-b border-black pb-1 uppercase tracking-wide">
+                        {isSinglePlanEn ? "IV. POST-LESSON REFLECTIONS / NOTES" : "IV. ĐIỀU CHỈNH SAU BÀI DẠY"}
+                      </h3>
+                      <p className="text-stone-500 italic pl-2">
+                        {activePlan.postLessonAdjustment || "...................................................................................................................................................................................................."}
+                      </p>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           ) : (
             <div className="bg-white border border-black p-12 text-center text-stone-400 font-serif shadow-[2px_2px_0px_rgba(0,0,0,1)]">

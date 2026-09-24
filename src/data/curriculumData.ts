@@ -693,7 +693,9 @@ export function generateFullWeekLessonPlans(
       session: item.session,
       timetablePeriod: item.period,
       periodNumber: currentPeriodInDay,
-      curriculumPeriod: item.curriculumPeriod || currentPeriodInDay,
+      curriculumPeriod: englishDetail 
+        ? ((schoolInfo.week - 1) * 4 + Math.max(1, Math.min(4, ((classEnglishCounters[item.className || String(itemGrade)] || 1) - 1) % 4 + 1)))
+        : (item.curriculumPeriod || currentPeriodInDay),
       week: schoolInfo.week,
       dayOfWeek: item.day,
       dateStr: item.dateStr || schoolInfo.startDate,

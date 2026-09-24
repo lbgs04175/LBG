@@ -1,4 +1,5 @@
 import { Grade, LessonActivity } from "../types";
+import { getOfficialEnglishPPCTLesson } from "./englishPPCTSchedule";
 
 export interface EnglishWord {
   word: string;
@@ -757,6 +758,12 @@ export function getDetailedEnglishLesson(
   customLessonTitle?: string,
   periodInWeek: number = 1
 ): EnglishLessonDetail {
+  // 1. Priority check: Official MOET PPCT mapped lessons (e.g. for Grades 3, 4, 5 Week 3 and full term)
+  const officialPPCT = getOfficialEnglishPPCTLesson(grade, week, periodInWeek);
+  if (officialPPCT && (!customLessonTitle || customLessonTitle.includes("TA") || customLessonTitle.includes("Tiết") || customLessonTitle.includes("Unit") || customLessonTitle.includes("Lesson") || customLessonTitle.includes("Tiếng Anh"))) {
+    return officialPPCT;
+  }
+
   const units = GRADE_ENGLISH_MAP[grade] || GRADE_3_ENGLISH_UNITS;
 
   // Try matching unit by title if provided
